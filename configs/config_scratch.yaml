@@ -1,0 +1,43 @@
+# Configuration for From-Scratch ConvNeXt V2
+
+# Model settings
+model:
+  name: convnextv2_tiny  # Start with smaller model for from-scratch
+  num_classes: 5
+  pretrained: false  # Train from scratch!
+
+# Data settings
+data:
+  csv_file: data/raw/train.csv
+  img_dir: data/raw/train_images
+  train_indices: data/splits/train_indices.npy
+  val_indices: data/splits/val_indices.npy
+  image_size: 224
+  batch_size: 32
+  num_workers: 4
+  preprocess: true
+  apply_clahe: false
+  advanced_aug: true  # More aggressive augmentation for from-scratch
+
+# Training settings
+training:
+  num_epochs: 100  # More epochs needed for from-scratch
+  freeze_epochs: 0  # No freezing when training from scratch
+  optimizer: adamw
+  learning_rate: 1e-3  # Higher LR for from-scratch
+  weight_decay: 5e-2  # Stronger regularization
+  scheduler: cosine
+  loss_type: weighted_ce
+  
+# Device settings
+device: cuda
+
+# Logging and saving
+experiment_name: scratch_exp_001
+save_dir: experiments/scratch
+log_interval: 10
+save_best: true
+save_last: true
+
+# Random seed
+seed: 42
