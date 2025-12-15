@@ -1,0 +1,43 @@
+# Configuration for Pre-trained ConvNeXt V2
+
+# Model settings
+model:
+  name: convnextv2_tiny  # Options: convnextv2_atto, femto, pico, nano, tiny, base, large
+  num_classes: 5
+  pretrained: true
+
+# Data settings
+data:
+  csv_file: data/raw/train.csv
+  img_dir: data/raw/train_images
+  train_indices: data/splits/train_indices.npy
+  val_indices: data/splits/val_indices.npy
+  image_size: 224
+  batch_size: 32
+  num_workers: 4
+  preprocess: true
+  apply_clahe: false
+  advanced_aug: false
+
+# Training settings
+training:
+  num_epochs: 30
+  freeze_epochs: 3  # Freeze backbone for first N epochs
+  optimizer: adamw  # Options: adamw, sgd
+  learning_rate: 1e-4
+  weight_decay: 1e-4
+  scheduler: cosine  # Options: cosine, plateau, onecycle
+  loss_type: weighted_ce  # Options: ce, weighted_ce, focal
+  
+# Device settings
+device: cuda  # Options: cuda, cpu
+
+# Logging and saving
+experiment_name: pretrained_exp_001
+save_dir: experiments/pretrained
+log_interval: 10  # Log every N batches
+save_best: true
+save_last: true
+
+# Random seed
+seed: 42
