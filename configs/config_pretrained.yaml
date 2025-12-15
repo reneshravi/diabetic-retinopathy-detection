@@ -24,8 +24,8 @@ training:
   num_epochs: 30
   freeze_epochs: 3  # Freeze backbone for first N epochs
   optimizer: adamw  # Options: adamw, sgd
-  learning_rate: 1e-4
-  weight_decay: 1e-4
+  learning_rate: 0.0001
+  weight_decay: 0.0001
   scheduler: cosine  # Options: cosine, plateau, onecycle
   loss_type: weighted_ce  # Options: ce, weighted_ce, focal
   

@@ -10,4 +10,4 @@ scikit-learn>=1.3.0
 pyyaml>=6.0
 tqdm>=4.65.0
 tensorboard>=2.13.0
-opencv-python>=4.8.0
+opencv-python>=4.8.0pyyaml>=6.0

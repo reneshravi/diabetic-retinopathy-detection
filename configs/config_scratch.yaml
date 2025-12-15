@@ -24,8 +24,8 @@ training:
   num_epochs: 100  # More epochs needed for from-scratch
   freeze_epochs: 0  # No freezing when training from scratch
   optimizer: adamw
-  learning_rate: 1e-3  # Higher LR for from-scratch
-  weight_decay: 5e-2  # Stronger regularization
+  learning_rate: 0.001  # Higher LR for from-scratch
+  weight_decay: 0.05  # Stronger regularization
   scheduler: cosine
   loss_type: weighted_ce
   
