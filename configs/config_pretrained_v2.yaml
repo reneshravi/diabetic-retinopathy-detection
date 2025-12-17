@@ -1,0 +1,53 @@
+# Model settings
+model:
+  name: convnextv2_tiny
+  num_classes: 5
+  pretrained: true
+
+# Data settings
+data:
+  csv_file: data/raw/train.csv
+  img_dir: data/raw/train_images
+  train_indices: data/splits/train_indices.npy
+  val_indices: data/splits/val_indices.npy
+  image_size: 224
+  batch_size: 32
+  num_workers: 4
+  preprocess: true
+  apply_clahe: true  # CHANGED: Try CLAHE
+  advanced_aug: true  # CHANGED: Stronger augmentation
+
+# Training settings
+training:
+  num_epochs: 25  # CHANGED: Stop earlier
+  freeze_epochs: 3
+  optimizer: adamw
+  learning_rate: 0.0001
+  weight_decay: 0.001  # CHANGED: 10x stronger (was 0.0001)
+  scheduler: cosine
+  loss_type: weighted_ce
+  
+device: cuda
+
+# Logging and saving
+experiment_name: pretrained_exp_002
+save_dir: experiments/pretrained
+log_interval: 10
+save_best: true
+save_last: true
+
+seed: 42
+
+
+
+### Changes made compared to config_pretrained.yaml:
+# weight_decay: 0.001 → Penalizes large weights, forces model to use simpler patterns
+# advanced_aug: true → More augmentation = harder to memorize
+# apply_clahe: true → Better image preprocessing
+# num_epochs: 25 → Stop before severe overfitting sets in
+
+### Expected results:
+
+# Train-val loss gap: Should shrink from ~0.95 to ~0.3-0.5
+# QWK: Might drop slightly (0.89-0.90) but better generalization
+# Training will be slower (stronger regularization = harder optimization)
