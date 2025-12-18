@@ -13,11 +13,19 @@ from src.training.optimizers import get_optimizer, get_scheduler
 from src.training.trainer import Trainer
 from src.utils.logger import setup_logger
 from src.utils.seed import set_seed
+import argparse 
 
 
 def main():
-    # Load config
-    config_path = 'configs/config_pretrained.yaml'
+    # Add argument parser
+    parser = argparse.ArgumentParser(description='Train pre-trained ConvNeXt V2')
+    parser.add_argument('--config', type=str, 
+                       default='configs/config_pretrained.yaml',
+                       help='Path to config file')
+    args = parser.parse_args()
+    
+    # Load config from argument
+    config_path = args.config
     with open(config_path, 'r') as f:
         config = yaml.safe_load(f)
     
