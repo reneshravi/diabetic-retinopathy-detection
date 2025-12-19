@@ -76,10 +76,13 @@ def main():
     
     # Create loss function
     logger.info(f"Using loss: {config['training']['loss_type']}")
+    label_smoothing = config['training'].get('label_smoothing', 0.0)  # NEW LINE
+    logger.info(f"Label smoothing: {label_smoothing}")  # NEW LINE
     criterion = get_loss_function(
-        loss_type=config['training']['loss_type'],
-        class_weights=class_weights,
-        device=device
+    loss_type=config['training']['loss_type'],
+    class_weights=class_weights,
+    label_smoothing=label_smoothing,  # NEW LINE
+    device=device
     )
     
     # Create optimizer
