@@ -67,10 +67,13 @@ def main():
     
     # Create model
     logger.info("Creating model...")
+    dropout = config['model'].get('dropout', 0.0)  
+    logger.info(f"Dropout rate: {dropout}") 
     model = get_model(
-        model_name=config['model']['name'],
-        num_classes=config['model']['num_classes'],
-        pretrained=config['model']['pretrained']
+    model_name=config['model']['name'],
+    num_classes=config['model']['num_classes'],
+    pretrained=config['model']['pretrained'],
+    dropout=dropout  
     )
     model = model.to(device)
     
