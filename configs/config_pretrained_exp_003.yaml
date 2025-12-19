@@ -25,7 +25,7 @@ training:
   loss_type: weighted_ce
   
 device: cuda
-experiment_name: pretrained_exp_003_no_dropout
+experiment_name: pretrained_exp_003
 save_dir: experiments/pretrained
 log_interval: 10
 save_best: true
