@@ -7,12 +7,13 @@ class WeightedCrossEntropyLoss(nn.Module):
     Cross entropy loss with class weights for handling imbalance.
     """
     
-    def __init__(self, weights):
+    def __init__(self, weights, label_smoothing=0.0):
         super(WeightedCrossEntropyLoss, self).__init__()
         self.weights = weights
+        self.label_smoothing = label_smoothing
     
     def forward(self, outputs, targets):
-        return F.cross_entropy(outputs, targets, weight=self.weights)
+        return F.cross_entropy(outputs, targets, weight=self.weights, label_smoothing=self.label_smoothing)
 
 
 class FocalLoss(nn.Module):
@@ -21,14 +22,15 @@ class FocalLoss(nn.Module):
     Reference: https://arxiv.org/abs/1708.02002
     """
     
-    def __init__(self, alpha=None, gamma=2.0, reduction='mean'):
+    def __init__(self, alpha=None, gamma=2.0, label_smoothing=0.0, reduction='mean'):
         super(FocalLoss, self).__init__()
         self.alpha = alpha
         self.gamma = gamma
+        self.label_smoothing = label_smoothing
         self.reduction = reduction
     
     def forward(self, inputs, targets):
-        ce_loss = F.cross_entropy(inputs, targets, reduction='none', weight=self.alpha)
+        ce_loss = F.cross_entropy(inputs, targets, reduction='none', weight=self.alpha, label_smoothing=self.label_smoothing)
         pt = torch.exp(-ce_loss)
         focal_loss = ((1 - pt) ** self.gamma) * ce_loss
         
@@ -40,7 +42,7 @@ class FocalLoss(nn.Module):
             return focal_loss
 
 
-def get_loss_function(loss_type='weighted_ce', class_weights=None, device='cuda'):
+def get_loss_function(loss_type='weighted_ce', class_weights=None, label_smoothing=0.0, device='cuda'):
     """
     Factory function to get loss function.
     
@@ -53,20 +55,20 @@ def get_loss_function(loss_type='weighted_ce', class_weights=None, device='cuda'
         loss function
     """
     if loss_type == 'ce':
-        return nn.CrossEntropyLoss()
+        return nn.CrossEntropyLoss(label_smoothing=label_smoothing)
     
     elif loss_type == 'weighted_ce':
         if class_weights is None:
             raise ValueError("class_weights required for weighted_ce")
         weights = class_weights.to(device)
-        return WeightedCrossEntropyLoss(weights)
+        return WeightedCrossEntropyLoss(weights, label_smoothing=label_smoothing)
     
     elif loss_type == 'focal':
         if class_weights is not None:
             alpha = class_weights.to(device)
         else:
             alpha = None
-        return FocalLoss(alpha=alpha, gamma=2.0)
+        return FocalLoss(alpha=alpha, gamma=2.0, label_smoothing=label_smoothing)
     
     else:
         raise ValueError(f"Unknown loss type: {loss_type}")
