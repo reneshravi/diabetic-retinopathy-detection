@@ -195,10 +195,12 @@ def evaluate_model(checkpoint_path, config_path, save_dir):
     print(f"Validation samples: {len(val_indices)}")
     
     # Load model
+    dropout = config['model'].get('dropout', 0.0)
     model = get_model(
         model_name=config['model']['name'],
         num_classes=config['model']['num_classes'],
-        pretrained=False  # We'll load weights from checkpoint
+        pretrained=False,
+        dropout=dropout
     )
     
     load_checkpoint(model, checkpoint_path)

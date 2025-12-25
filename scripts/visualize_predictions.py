@@ -290,10 +290,12 @@ def main():
     print(f"Loaded {len(dataset)} validation samples")
     
     # Load model
+    dropout = config['model'].get('dropout', 0.0)  
     model = get_model(
         model_name=config['model']['name'],
         num_classes=config['model']['num_classes'],
-        pretrained=False
+        pretrained=False,
+        dropout=dropout  
     )
     
     load_checkpoint(model, args.checkpoint)
